@@ -23,25 +23,37 @@ class BridgeHookMiddleware
      */
     function handle(Request $request, \Closure $next)
     {
+        $data = $request->input();
+
         if (!config('bridge.webhooks.secret_enable', false)) {
+            $this->fireEvents($data);
             return $next($request);
         }
-        $data = $request->input();
+
         $dataCheck = json_encode($data);
         $bridgeSignatureData = $request->header('Bridgeapi-Signature');
         foreach (explode(',', $bridgeSignatureData) as $signature) {
             if (static::verifySignature($signature, $dataCheck)) {
-                foreach (config('bridge.webhooks.events', []) as $event) {
-                    $event = new $event($data);
-                    if ($event instanceof BridgeWebhookVerifiedEventInterface) {
-                        event(new $event($data));
-                    }
-                }
+                $this->fireEvents($data);
                 return $next($request);
             }
         }
         $exception = new WebhooksVerifySignatureException();
         throw new AccessDeniedHttpException($exception->getMessage(), $exception);
+    }
+
+    /**
+     * @param $data
+     * @return void
+     */
+    function fireEvents($data)
+    {
+        foreach (config('bridge.webhooks.events', []) as $event) {
+            $event = new $event();
+            if ($event instanceof BridgeWebhookVerifiedEventInterface) {
+                event(new $event($data));
+            }
+        }
     }
 
     /**
