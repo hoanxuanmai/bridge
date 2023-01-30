@@ -16,9 +16,9 @@ class AccountApi
 {
     const BASE_PATH = '/v2/accounts';
 
-    static function getList($access_token): ApiResponseListInterface
+    static function getList($access_token, $uri = null): ApiResponseListInterface
     {
-        return Client::wantList()->get(static::BASE_PATH, [
+        return Client::wantList()->get($uri ?? static::BASE_PATH, [
             'headers' => [
                 'Authorization' => "Bearer $access_token"
             ]
