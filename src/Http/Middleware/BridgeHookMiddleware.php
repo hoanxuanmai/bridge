@@ -30,7 +30,7 @@ class BridgeHookMiddleware
             return $next($request);
         }
 
-        $dataCheck = json_encode($data);
+        $dataCheck = $request->getContent();
         $bridgeSignatureData = $request->header('Bridgeapi-Signature');
         foreach (explode(',', $bridgeSignatureData) as $signature) {
             if (static::verifySignature($signature, $dataCheck)) {
