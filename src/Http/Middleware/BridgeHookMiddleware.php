@@ -39,7 +39,10 @@ class BridgeHookMiddleware
             }
         }
         $exception = new WebhooksVerifySignatureException();
-        throw new AccessDeniedHttpException($exception->getMessage(), $exception);
+        return response()->json([
+            'message' => $exception->getMessage(),
+        ], 403);
+//        throw new AccessDeniedHttpException($exception->getMessage(), $exception);
     }
 
     /**

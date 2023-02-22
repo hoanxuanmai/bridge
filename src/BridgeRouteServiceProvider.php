@@ -17,6 +17,8 @@ class BridgeRouteServiceProvider extends RouteServiceProvider
     {
         Route::prefix((string) config('bridge.webhooks.prefix', 'webhooks/bridge'))
             ->middleware(config('bridge.webhooks.middlewares', [BridgeHookMiddleware::class]))
-            ->group(__DIR__.'/Routes/hooks.php');
+            ->as(config('bridge.webhooks.name', 'bridge.webhook'))
+            ->any('', \HXM\Bridge\Http\Controllers\HookController::class);
+//            ->group(__DIR__.'/Routes/hooks.php');
     }
 }

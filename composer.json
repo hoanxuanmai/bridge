@@ -1,6 +1,8 @@
 {
     "name": "hxm/bridge",
-    "description": "",
+    "description": "Connection with https://api.bridgeapi.io",
+    "keywords": ['hxm', 'bridge', 'bridgeapi', 'bridgeapi.io', 'api.bridgeapi.io'],
+    "license": "MIT",
     "authors": [
         {
             "name": "HoanXuanMai",

@@ -17,6 +17,7 @@ return [
     ],
     'webhooks' => [
         'prefix' => 'webhooks/bridge',
+        'name' => 'bridge.webhook',
         'secret_enable' => env('BRIDGE_WEBHOOKS_SECRET_ENABLE', false),
         'secret_code' => env('BRIDGE_WEBHOOKS_SECRET_CODE', ''),
         'events' => [
