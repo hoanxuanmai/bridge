@@ -31,6 +31,7 @@ class BridgeServiceProvider extends ServiceProvider
         $this->app->bind(AsyncClient::class, function(){
             return new AsyncClient;
         });
+        $this->registerListeners();
     }
 
     /**
@@ -42,13 +43,15 @@ class BridgeServiceProvider extends ServiceProvider
     {
         $this->app->register(BridgeRouteServiceProvider::class);
         $this->registerConfig();
-        $this->booting(function(){
-            foreach (config('bridge.listeners', []) as $event => $listeners) {
-                foreach (array_unique(Arr::wrap($listeners)) as $listener) {
-                    Event::listen($event, $listener);
-                }
+    }
+
+    protected function registerListeners()
+    {
+        foreach (config('bridge.listeners', []) as $event => $listeners) {
+            foreach (array_unique(Arr::wrap($listeners)) as $listener) {
+                Event::listen($event, $listener);
             }
-        });
+        }
     }
 
     /**
